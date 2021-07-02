@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>AES算法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="简介AES,高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。严格地说，AES和Rijndael加密法并不完全一样（虽然在实际应用中二者可以互换），因为Rijndael加密法可以支持更大范围的区块和密钥长度：AES的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AES算法">
+<meta property="og:url" content="http://example.com/2021/07/02/AES/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="简介AES,高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。严格地说，AES和Rijndael加密法并不完全一样（虽然在实际应用中二者可以互换），因为Rijndael加密法可以支持更大范围的区块和密钥长度：AES的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210702192744824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210702210915584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-07-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-02T13:17:31.562Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210702192744824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-AES" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/02/AES/" class="article-date">
+  <time class="dt-published" datetime="2021-07-01T16:00:00.000Z" itemprop="datePublished">2021-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      AES算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>AES,高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。严格地说，AES和Rijndael加密法并不完全一样（虽然在实际应用中二者可以互换），因为Rijndael加密法可以支持更大范围的区块和密钥长度：AES的区块长度固定为128 比特，密钥长度则可以是128，192或256比特；而Rijndael使用的密钥和区块长度可以是32位的整数倍，以128位为下限，256比特为上限。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="基本术语"><a href="#基本术语" class="headerlink" title="基本术语"></a>基本术语</h2><h3 id="字节"><a href="#字节" class="headerlink" title="字节"></a>字节</h3><p>AES基本处理单位为字节，在AES中字节可以以有限域上的多项式表示<br>$b_7x^7+b_6x^6+b_5x^5+b_4x^4+b_3x^3+b_2x^2+b_1x+b_0$<br>例：字节 01100011（0x63）：$x^6+x^5+x+1$</p>
+<h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>AES的操作在称为状态(state)的二维字节数组上进行。状态由4行字节组成，每行长度为(分组长度/32)个字节。在实际实现中将每一列的4个字节作为32位字。<br>例：长度为128位的分组数据块<br>F6 14 46 C1 A6 8C EA 53 82 48 26 A7 A4 7F 19 14<br>| F6 | A6 | 82 | A4 |<br>| :—–:| :—-: | :—-: | :—-: |<br>| 14 | 8C | 48 | 7F |<br>| 46 | EA | 26 | 19 |<br>| C1 | 53 | A7 | 14 |</p>
+<h2 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h2><h3 id="加减法"><a href="#加减法" class="headerlink" title="加减法"></a>加减法</h3><p>有限域上加减法是通过对应多项式中相同次幂系数相加减后模2来实现的，加法也可以看作异或操作。</p>
+<h3 id="乘法"><a href="#乘法" class="headerlink" title="乘法"></a>乘法</h3><p>对应多项式相乘再模$x^8+x^4+x^3+x+1$</p>
+<h3 id="乘x"><a href="#乘x" class="headerlink" title="乘x"></a>乘x</h3><p>多项式乘x得到$b_7x^8+b_6x^7+b_5x^6+b_4x^5+b_3x^4+b_2x^3+b_1x^2+b_0x$<br>模$x^8+x^4+x^3+x+1$约简，$b_7=0$则为最简，不为零则减去$x^8+x^4+x^3+x+1$。<br>这种乘法在AES中称作xtime()</p>
+<h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>AES输入、输出分组及状态数组的长度都是128位，即Nb(分组长度/32)=4，密钥K长度为128/192/256位，即Nk=4/6/8。轮数用Nr表示，Nk=4时，Nr=10，Nk=6时，Nr=12，Nk=10时，Nr=14。</p>
+<h3 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a>加密过程</h3><p>将输入复制到状态数组。进行一个初始轮密钥加，然后执行轮函数Nr次，其中最后一轮不同于前Nr-1轮。最后得到密文。<br>轮函数有四个组成部分：SubBytes(),ShiftRows(),MixColumns(),AddRoundKey()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cipher(byte in[4][Nb],byte out[4][Nb],dword dw[Nb][Nr+1])</span><br><span class="line">&#123;</span><br><span class="line">    byte state[4][Nb]</span><br><span class="line">    state&#x3D;in</span><br><span class="line">    AddRoundKey(state,dw[0][Nb-1]) &#x2F;&#x2F;初始轮密钥加</span><br><span class="line">    for(i&#x3D;0;i&lt;Nr-1;i++) &#x2F;&#x2F;Nr-1轮轮函数</span><br><span class="line">    &#123;</span><br><span class="line">        SubBytes(state)</span><br><span class="line">        ShiftRows(state)</span><br><span class="line">        MixColumns(state)</span><br><span class="line">        AddRoundKey(state,dw[i*Nb,(i+1)*Nb-1])</span><br><span class="line">    &#125;</span><br><span class="line">    SubBytes(state)</span><br><span class="line">    ShiftRows(state)</span><br><span class="line">    AddRoundKey(state,dw[Nr*Nb,(Nr+1)*Nb-1])</span><br><span class="line">    out&#x3D;state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="SubBytes"><a href="#SubBytes" class="headerlink" title="SubBytes()"></a>SubBytes()</h3><p>字节代换，AES定义了一个16x16的S-box。<br><img src="https://img-blog.csdnimg.cn/20210702192744824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>以状态数组每个元素高4位作行标，低4位作列标，取出S-box中元素作为操作结果。</p>
+<h3 id="ShiftRows"><a href="#ShiftRows" class="headerlink" title="ShiftRows()"></a>ShiftRows()</h3><p>状态数组第一行保持不变，第二行循环左移一个字节，第三行循环左移两个字节，第四行循环左移三个字节。</p>
+<h3 id="MixColumns"><a href="#MixColumns" class="headerlink" title="MixColumns()"></a>MixColumns()</h3><p>以列为单位作变换<br>$\begin{bmatrix}s_{0,c}\s_{1,c}\s_{2,c}\s_{3,c}\\end{bmatrix}=\begin{bmatrix}02&amp;03&amp;01&amp;01\01&amp;02&amp;03&amp;01\01&amp;01&amp;02&amp;03\03&amp;01&amp;01&amp;02\end{bmatrix}\begin{bmatrix}s_{0,c}\s_{1,c}\s_{2,c}\s_{3,c}\\end{bmatrix}$</p>
+<h3 id="AddRoundKey"><a href="#AddRoundKey" class="headerlink" title="AddRoundKey()"></a>AddRoundKey()</h3><p>将状态中元素同轮密钥通过简单的异或运算相加。轮密钥是由密钥通过密钥扩展生成的，也可看做一个状态数组。<br>密钥扩展：<br>将密钥进行处理，生成Nb(Nr+1)个32位双字，为轮函数提供密钥。<br><img src="https://img-blog.csdnimg.cn/20210702210915584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>加密算法的逆过程，解密轮函数也有四部分：<br>InvShiftRows(ShiftRows的逆过程):执行相应的向右位移<br>InvSubBytes(SubBytes的逆过程):在Inverse S-box中查表操作<br>InvMixColumns(MixColumns的逆过程):乘矩阵$\begin{bmatrix}0e&amp;0b&amp;0d&amp;09\09&amp;0e&amp;0b&amp;0d\0d&amp;09&amp;0e&amp;0b\0b&amp;0d&amp;09&amp;0e\end{bmatrix}$<br>AddRoundKey为异或操作，逆过程是其本身。</p>
+<hr>
+<p>以上是原理在程序中的实现与实例分析有空再看。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqmdfy9n0000w8v60inygwt2" data-title="AES算法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/06/03/exe%E8%BD%ACpy/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">exe转py</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/02/AES/">AES算法</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/12/TSCTF-J%202019%20EasyCPP/">TSCTF-J 2019 EasyCPP</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/">动态调试练习</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/18/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
