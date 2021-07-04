@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-07-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-02T13:17:31.562Z">
+<meta property="article:modified_time" content="2021-07-04T10:15:27.179Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210702192744824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70">
@@ -115,13 +115,12 @@
 <h3 id="AddRoundKey"><a href="#AddRoundKey" class="headerlink" title="AddRoundKey()"></a>AddRoundKey()</h3><p>将状态中元素同轮密钥通过简单的异或运算相加。轮密钥是由密钥通过密钥扩展生成的，也可看做一个状态数组。<br>密钥扩展：<br>将密钥进行处理，生成Nb(Nr+1)个32位双字，为轮函数提供密钥。<br><img src="https://img-blog.csdnimg.cn/20210702210915584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p><img src="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>加密算法的逆过程，解密轮函数也有四部分：<br>InvShiftRows(ShiftRows的逆过程):执行相应的向右位移<br>InvSubBytes(SubBytes的逆过程):在Inverse S-box中查表操作<br>InvMixColumns(MixColumns的逆过程):乘矩阵$\begin{bmatrix}0e&amp;0b&amp;0d&amp;09\09&amp;0e&amp;0b&amp;0d\0d&amp;09&amp;0e&amp;0b\0b&amp;0d&amp;09&amp;0e\end{bmatrix}$<br>AddRoundKey为异或操作，逆过程是其本身。</p>
-<hr>
-<p>以上是原理在程序中的实现与实例分析有空再看。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>实际软件实现采用了空间换时间的方法，与上述过程不同,常常将轮函数的几个步骤合并为一组查表操作。<br>实现过程中定义了4个T表，每个T表都有256个4字节的32位双字（共4KB），以此将SubBytes，ShiftRows，MixColumns合并为简单的查表操作。AddRoundKey可以通过在每一列上执行一个32位异或来实现。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqmdfy9n0000w8v60inygwt2" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqp86y0w00002cv68fqjadwg" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -132,9 +131,9 @@
 <nav id="article-nav">
   
   
-    <a href="/2021/06/03/exe%E8%BD%ACpy/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/07/02/AESKeyGenMe/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">exe转py</div>
+      <div class="article-nav-title">AESKeyGenMe</div>
     </a>
   
 </nav>
@@ -176,6 +175,10 @@
           </li>
         
           <li>
+            <a href="/2021/07/02/AESKeyGenMe/">AESKeyGenMe</a>
+          </li>
+        
+          <li>
             <a href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
           </li>
         
@@ -185,10 +188,6 @@
         
           <li>
             <a href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/">动态调试练习</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/18/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
           </li>
         
       </ul>

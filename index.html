@@ -108,13 +108,55 @@
 <h3 id="AddRoundKey"><a href="#AddRoundKey" class="headerlink" title="AddRoundKey()"></a>AddRoundKey()</h3><p>将状态中元素同轮密钥通过简单的异或运算相加。轮密钥是由密钥通过密钥扩展生成的，也可看做一个状态数组。<br>密钥扩展：<br>将密钥进行处理，生成Nb(Nr+1)个32位双字，为轮函数提供密钥。<br><img src="https://img-blog.csdnimg.cn/20210702210915584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p><img src="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>加密算法的逆过程，解密轮函数也有四部分：<br>InvShiftRows(ShiftRows的逆过程):执行相应的向右位移<br>InvSubBytes(SubBytes的逆过程):在Inverse S-box中查表操作<br>InvMixColumns(MixColumns的逆过程):乘矩阵$\begin{bmatrix}0e&amp;0b&amp;0d&amp;09\09&amp;0e&amp;0b&amp;0d\0d&amp;09&amp;0e&amp;0b\0b&amp;0d&amp;09&amp;0e\end{bmatrix}$<br>AddRoundKey为异或操作，逆过程是其本身。</p>
-<hr>
-<p>以上是原理在程序中的实现与实例分析有空再看。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>实际软件实现采用了空间换时间的方法，与上述过程不同,常常将轮函数的几个步骤合并为一组查表操作。<br>实现过程中定义了4个T表，每个T表都有256个4字节的32位双字（共4KB），以此将SubBytes，ShiftRows，MixColumns合并为简单的查表操作。AddRoundKey可以通过在每一列上执行一个32位异或来实现。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqmdfy9n0000rcv683mj8eje" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqp86y0w00002cv68fqjadwg" data-title="AES算法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-AESKeyGenMe" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/02/AESKeyGenMe/" class="article-date">
+  <time class="dt-published" datetime="2021-07-01T16:00:00.000Z" itemprop="datePublished">2021-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/02/AESKeyGenMe/">AESKeyGenMe</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>AES的实例分析</p>
+<p>首先用PEiD的插件Krypto ANALyzer查看文件<br><img src="https://img-blog.csdnimg.cn/20210704165735612.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>显示文件中由MD5算法的常量元素及AES的S盒与逆S盒，可能使用到MD5，AES算法。</p>
+<p>使用IDA，定位关键代码并分析<br><img src="https://img-blog.csdnimg.cn/20210704204910305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到输入的序列号长度应为32<br>进入sub_4012F0<br><img src="https://img-blog.csdnimg.cn/20210704205443324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到4个MD5状态变量<br>由此推出对用户名作了MD5<br>分析sub_401EC0函数<br><img src="https://img-blog.csdnimg.cn/20210704210220971.png" alt="在这里插入图片描述"><br>这部分可能是用于判断密钥长度<br>进一步找到S盒<br><img src="https://img-blog.csdnimg.cn/20210704210630176.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>推测是对输入的序列号进行了AES加密与MD5后的用户名进行比较<br><img src="https://img-blog.csdnimg.cn/2021070421121356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>v7应该是AES的密钥<br>写出解密脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from hashlib import md5</span><br><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from binascii import b2a_hex</span><br><span class="line"></span><br><span class="line">name&#x3D;b&#39;tipsy&#39;</span><br><span class="line">md5_digest&#x3D;md5(name).digest()</span><br><span class="line">aes&#x3D;AES.new(key&#x3D;b&#39;\x2B\x7E\x15\x16\x28\xAE\xD2\xA6\xAB\xF7\x15\x88\x09\xCF\x4F\x3C&#39;,mode&#x3D;AES.MODE_ECB)</span><br><span class="line">decrypt&#x3D;aes.decrypt(md5_digest)</span><br><span class="line">print(b2a_hex(decrypt).decode().upper())</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210704212158192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/02/AESKeyGenMe/" data-id="ckqp86y1000012cv67agi7tuq" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -156,7 +198,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqmdfy9t0003rcv651rf7rrn" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqp86y1600052cv6ayvu6om4" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -204,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqmdfy9s0002rcv69ur16rc4" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqp86y1200032cv60whxb01v" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -246,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqmdfy9z0004rcv6cuxk8auu" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqp86y1300042cv62u7uei49" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -293,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/18/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqmdfy9r0001rcv6ar0tchiw" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/04/18/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqp86y1200022cv6bqia7c4r" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -340,6 +382,10 @@
           </li>
         
           <li>
+            <a href="/2021/07/02/AESKeyGenMe/">AESKeyGenMe</a>
+          </li>
+        
+          <li>
             <a href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
           </li>
         
@@ -349,10 +395,6 @@
         
           <li>
             <a href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/">动态调试练习</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/18/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
           </li>
         
       </ul>
