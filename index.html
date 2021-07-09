@@ -71,6 +71,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-pyc学习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="dt-published" datetime="2021-07-08T16:00:00.000Z" itemprop="datePublished">2021-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/">pyc学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="pyc学习"><a href="#pyc学习" class="headerlink" title="pyc学习"></a>pyc学习</h1><h2 id="pyc文件的格式"><a href="#pyc文件的格式" class="headerlink" title="pyc文件的格式"></a>pyc文件的格式</h2><p>最开始4个字节是一个Maigc int, 标识此pyc的版本信息。<br>接下来四个字节还是个int,是pyc产生的时间。<br>接下来是个序列化了的 PyCodeObject。</p>
+<h3 id="magic-int"><a href="#magic-int" class="headerlink" title="magic int"></a>magic int</h3><p>像大多数的文件格式一样，pyc 文件开头也有一个magic number，不过不一样的是 pyc文件的magic number并不固定，而是不同版本的Python生成的pyc文件的magic number都不相同。</p>
+<h3 id="文件信息"><a href="#文件信息" class="headerlink" title="文件信息"></a>文件信息</h3><p>在Python2的时候，这部分只有4个字节，为源代码文件的修改时间。<br>Python3.5和3.6相对于Python2，源代码文件信息这部分，在时间后面增加了4个字节的源代码文件的大小。<br>从Python3.7开始支持hash-based pyc文件，Python为了支持hash校验又使源代码文件信息这部分增加了4个字节，变为一共12个字节。</p>
+<h3 id="PycObject"><a href="#PycObject" class="headerlink" title="PycObject"></a>PycObject</h3><p>一串二进制流,代表着指令序列，详见<a target="_blank" rel="noopener" href="https://kdr2.com/tech/python/pyc-format.html">https://kdr2.com/tech/python/pyc-format.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckqwia5zw000478v64ngrcig8" data-title="pyc学习" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Re中常见的加密算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" class="article-date">
@@ -114,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqtkt26b0003vcv6042m34cj" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqwia5zv000278v69hm5cyc1" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -157,7 +199,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckqtkt2690001vcv6c7cx65r7" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckqwia5zt000178v60zn052lg" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -211,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqtkt2660000vcv6hfbgghp3" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqwia5zp000078v6bdgbbvei" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -253,7 +295,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqtkt26g0005vcv611jo56ps" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqwia5zx000578v62wbt8hnt" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -301,7 +343,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqtkt26b0002vcv60iudgii1" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqwia5zw000378v6em51b443" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -343,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqtkt26c0004vcv66jluezfn" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqwia601000678v67jqq8ke2" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -386,6 +428,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/">pyc学习</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
           </li>
         
@@ -399,10 +445,6 @@
         
           <li>
             <a href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
-          </li>
-        
-          <li>
-            <a href="/2021/05/12/TSCTF-J%202019%20EasyCPP/">TSCTF-J 2019 EasyCPP</a>
           </li>
         
       </ul>
