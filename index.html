@@ -71,6 +71,47 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-安卓逆向入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" class="article-date">
+  <time class="dt-published" datetime="2021-07-09T16:00:00.000Z" itemprop="datePublished">2021-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/">安卓逆向入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="安卓逆向入门"><a href="#安卓逆向入门" class="headerlink" title="安卓逆向入门"></a>安卓逆向入门</h1><h2 id="apk文件结构"><a href="#apk文件结构" class="headerlink" title="apk文件结构"></a>apk文件结构</h2><p>安卓应用是使用java编写的，它利用Android SDK编译代码，并且把所有资源文件和数据统一打包成APK，将apk文件扩展名改为zip即可解压。<br><img src="https://img-blog.csdnimg.cn/2021071021332163.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>(1)META-INF目录<br><img src="https://img-blog.csdnimg.cn/20210710213815170.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>MANIFEST.MF:清单文件<br>CERT.RSA:应用签名文件<br>CERT.SF:资源列表及对应SHA-1签名<br>(2)lib目录<br>包括平台相关库文件<br>(3)res<br>没有编译到resources.arsc中的其它资源<br>(4)assests<br>能通过AssetManager访问的资源文件<br>(5)AndroidManifest.xml<br>安卓组件清单文件，可使用apktool转换成XML明文格式文件，包含应用名字、版本、权限等信息<br>(6)classes.dex<br>安卓可执行文件，包含该可执行文件中所有Java层代码。<br>(7)resources.arsc<br>编译好的资源文件</p>
+<hr>
+<p>后续做的Android题目wp可能写到这篇文章里</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckqxtv3vl0006s0v66fiw94mj" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-pyc学习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" class="article-date">
@@ -101,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckqwia5zw000478v64ngrcig8" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckqxtv3vl0005s0v6azst2hjx" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -156,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqwia5zv000278v69hm5cyc1" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqxtv3vj0002s0v6dgm3hvrx" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -199,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckqwia5zt000178v60zn052lg" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckqxtv3vh0001s0v6dh2xccxl" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -253,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqwia5zp000078v6bdgbbvei" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqxtv3vd0000s0v69a5kelgh" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -295,7 +336,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqwia5zx000578v62wbt8hnt" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqxtv3vk0004s0v6ab4l0jgt" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -343,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqwia5zw000378v6em51b443" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqxtv3vk0003s0v6efcc8uju" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -385,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqwia601000678v67jqq8ke2" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqxtv3vr0007s0v6465b8nsl" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -428,6 +469,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/">安卓逆向入门</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/">pyc学习</a>
           </li>
         
@@ -441,10 +486,6 @@
         
           <li>
             <a href="/2021/07/02/AES/">AES算法</a>
-          </li>
-        
-          <li>
-            <a href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
           </li>
         
       </ul>
