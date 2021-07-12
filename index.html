@@ -71,6 +71,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-upx手动脱壳" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" class="article-date">
+  <time class="dt-published" datetime="2021-07-11T16:00:00.000Z" itemprop="datePublished">2021-07-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">AESKeyGenMe</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="upx手动脱壳"><a href="#upx手动脱壳" class="headerlink" title="upx手动脱壳"></a>upx手动脱壳</h1><p>虽然UPX本身提供脱壳器，但是修改后可能导致官方版本的UPX脱壳失败，因此需要学习upx手动脱壳。</p>
+<p>使用OD在win10系统上脱壳会遇到部分API更改导致OllyDump基址无法正确填入的问题，x64DBG解决了这一问题。</p>
+<p>一般情况下，已有栈的内容不会更改，upx会把这样的信息压栈，x86汇编指令pushad可以一次性压栈，载入后发现程序最开始为pushad指令。<br><img src="https://img-blog.csdnimg.cn/2021071223115399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>如果在pushad执行后在栈顶下硬件读取断点，那么当程序执行完后续代码，使用popad恢复寄存器时就会中断。</p>
+<p>于是，先单步执行pushad，再设置硬件读取断点。<br><img src="https://img-blog.csdnimg.cn/20210712232457372.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>按F9运行程序，程序中断在popad之后，看到后面是一个栈空间减少0x80的循环，后面接着一个较远的跳转，壳程序一般与原程序在不同区段，因此相隔较远，可以猜测较远的跳转指向原代码。<br><img src="https://img-blog.csdnimg.cn/20210712232610138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>删除硬件断点，然后使用F4运行到较远的跳转，再单步运行一次。<br>可以看到程序执行到了很像原程序的代码。<br><img src="https://img-blog.csdnimg.cn/20210712233154611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>打开Scylla插件如下。<br><img src="https://img-blog.csdnimg.cn/2021071223340196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>使用IATAutosearch自动填入导入地址，再使用GetImports去掉imports中有红叉的部分。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210712233812482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击Dump将内存转为可执行文件，然后点击Fix Dump修复导入表。<br>将脱壳后的文件使用IDA打开,可以发现程序已经被还原。<br><img src="https://img-blog.csdnimg.cn/2021071223421945.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>ps:这种方法生成的程序只能在IDA中分析，无法正常运行，因为程序的重定位信息仍未被修复，可以通过修改Nt Header的方式阻止系统对这个程序进行重定位进而正常运行。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr0suozw0006qkv645ac41f1" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-安卓逆向入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" class="article-date">
@@ -100,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckqxtv3vl0006s0v66fiw94mj" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr0suozw0007qkv60tsn0mx4" data-title="安卓逆向入门" class="article-share-link">Share</a>
       
       
       
@@ -142,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckqxtv3vl0005s0v6azst2hjx" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr0suozv0005qkv6bmzs39up" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -197,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckqxtv3vj0002s0v6dgm3hvrx" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr0suozt0002qkv65pbt5f30" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -240,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckqxtv3vh0001s0v6dh2xccxl" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr0suozr0001qkv677r6133i" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -294,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckqxtv3vd0000s0v69a5kelgh" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr0suozn0000qkv69qqs2qud" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -336,7 +381,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckqxtv3vk0004s0v6ab4l0jgt" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr0suozv0004qkv67rvv6pnq" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -384,7 +429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckqxtv3vk0003s0v6efcc8uju" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr0suozu0003qkv6337s0agy" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -426,7 +471,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckqxtv3vr0007s0v6465b8nsl" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr0sup000008qkv631t64ntn" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -469,6 +514,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">AESKeyGenMe</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/">安卓逆向入门</a>
           </li>
         
@@ -482,10 +531,6 @@
         
           <li>
             <a href="/2021/07/04/AESKeyGenMe/">AESKeyGenMe</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/02/AES/">AES算法</a>
           </li>
         
       </ul>
