@@ -71,6 +71,54 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-PE" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/15/PE/" class="article-date">
+  <time class="dt-published" datetime="2021-07-14T16:00:00.000Z" itemprop="datePublished">2021-07-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/15/PE/">PE结构</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="PE结构"><a href="#PE结构" class="headerlink" title="PE结构"></a>PE结构</h1><p>PE（Portable Execute）文件是Windows下可执行文件的总称，常见的有DLL，EXE，它们之间的区别只是语义上的，它们使用完全相同的PE格式，唯一的区别就是用一个字段标识出是EXE还是DLL。</p>
+<p>PE格式定义在头文件winnt.h中，64位PE格式只是对32位做了简单的扩展，结构几乎一样。<br><img src="https://img-blog.csdnimg.cn/20210715141353817.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="MS-DOS头部"><a href="#MS-DOS头部" class="headerlink" title="MS-DOS头部"></a>MS-DOS头部</h1><p>每个PE文件都是以一个DOS程序开始的。<br>PE文件的第一个字节起始于一个传统的MS-DOS头部，被称为IMAGE_DOS_HEADER。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_DOS_HEADER &#123;      &#x2F;&#x2F; DOS .EXE header</span><br><span class="line">    WORD   e_magic;                     &#x2F;&#x2F; Magic number</span><br><span class="line">    WORD   e_cblp;                      &#x2F;&#x2F; Bytes on last page of file</span><br><span class="line">    WORD   e_cp;                        &#x2F;&#x2F; Pages in file</span><br><span class="line">    WORD   e_crlc;                      &#x2F;&#x2F; Relocations</span><br><span class="line">    WORD   e_cparhdr;                   &#x2F;&#x2F; Size of header in paragraphs</span><br><span class="line">    WORD   e_minalloc;                  &#x2F;&#x2F; Minimum extra paragraphs needed</span><br><span class="line">    WORD   e_maxalloc;                  &#x2F;&#x2F; Maximum extra paragraphs needed</span><br><span class="line">    WORD   e_ss;                        &#x2F;&#x2F; Initial (relative) SS value</span><br><span class="line">    WORD   e_sp;                        &#x2F;&#x2F; Initial SP value</span><br><span class="line">    WORD   e_csum;                      &#x2F;&#x2F; Checksum</span><br><span class="line">    WORD   e_ip;                        &#x2F;&#x2F; Initial IP value</span><br><span class="line">    WORD   e_cs;                        &#x2F;&#x2F; Initial (relative) CS value</span><br><span class="line">    WORD   e_lfarlc;                    &#x2F;&#x2F; File address of relocation table</span><br><span class="line">    WORD   e_ovno;                      &#x2F;&#x2F; Overlay number</span><br><span class="line">    WORD   e_res[4];                    &#x2F;&#x2F; Reserved words</span><br><span class="line">    WORD   e_oemid;                     &#x2F;&#x2F; OEM identifier (for e_oeminfo)</span><br><span class="line">    WORD   e_oeminfo;                   &#x2F;&#x2F; OEM information; e_oemid specific</span><br><span class="line">    WORD   e_res2[10];                  &#x2F;&#x2F; Reserved words</span><br><span class="line">    LONG   e_lfanew;                    &#x2F;&#x2F; File address of new exe header</span><br><span class="line">  &#125; IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;</span><br></pre></td></tr></table></figure>
+<p>e_magic：一个WORD类型0x4D5A,因此可执行文件必须都是’MZ’开头。</p>
+<p>e_lfanew：为32位可执行文件扩展的域，用来表示DOS头之后的NT头相对文件起始地址的偏移。</p>
+<h2 id="PE文件头"><a href="#PE文件头" class="headerlink" title="PE文件头"></a>PE文件头</h2><p>PE相关结构NT映像头，PE文件执行时，装载器在IMAGE_DOS_HEADER中的e_lfanew中找到PE头的起始偏移量，加上基地址就是PE文件头指针。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_NT_HEADERS &#123;</span><br><span class="line">    DWORD Signature;</span><br><span class="line">    IMAGE_FILE_HEADER FileHeader;</span><br><span class="line">    IMAGE_OPTIONAL_HEADER32 OptionalHeader;</span><br><span class="line">   &#125; IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32; </span><br></pre></td></tr></table></figure>
+<h3 id="Signature"><a href="#Signature" class="headerlink" title="Signature"></a>Signature</h3><p>类似于DOS头中的e_magic，0x00004550，用字符表示是’PE’</p>
+<h3 id="FileHeader"><a href="#FileHeader" class="headerlink" title="FileHeader"></a>FileHeader</h3> <figure class="highlight plain"><figcaption><span>struct _IMAGE_FILE_HEADER &#123;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    WORD    Machine; &#x2F;&#x2F;运行平台</span><br><span class="line">    WORD    NumberOfSections; &#x2F;&#x2F;文件区块数</span><br><span class="line">    DWORD   TimeDateStamp; &#x2F;&#x2F;创建的日期时间</span><br><span class="line">    DWORD   PointerToSymbolTable; &#x2F;&#x2F;指向符号表</span><br><span class="line">    DWORD   NumberOfSymbols; &#x2F;&#x2F;符号表中符号个数</span><br><span class="line">    WORD    SizeOfOptionalHeader; &#x2F;&#x2F;紧随其后的可选头的大小</span><br><span class="line">    WORD    Characteristics; &#x2F;&#x2F;文件属性</span><br><span class="line">&#125; IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/15/PE/" data-id="ckr52ds7r000244v6gdu7d0um" data-title="PE结构" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-upx手动脱壳" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" class="article-date">
@@ -104,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr0sx9z80006v0v6ghkpcq8u" data-title="upx手动脱壳" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr52ds7v000744v6awbwbmju" data-title="upx手动脱壳" class="article-share-link">Share</a>
       
       
       
@@ -145,7 +193,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr0sx9zd0008v0v6efnrgdsm" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr52ds7z000944v63q9y7q4y" data-title="安卓逆向入门" class="article-share-link">Share</a>
       
       
       
@@ -187,7 +235,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr0sx9z80005v0v6ebkib0js" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr52ds7u000644v6fzb73agk" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -242,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr0sx9z60002v0v6fqr84vis" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr52ds7s000344v6dj8afwrx" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -285,7 +333,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr0sx9z40001v0v61y2ad918" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr52ds7q000144v6848w6ag3" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -339,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr0sx9z00000v0v66rvj1k5r" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr52ds7m000044v61z98cbwv" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -381,7 +429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr0sx9z70004v0v69aot7cy5" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr52ds7u000544v667glfetx" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -429,7 +477,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr0sx9z60003v0v6emlbeb4t" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr52ds7t000444v6gl7z8qbw" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -471,7 +519,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr0sx9z90007v0v69sde3g5d" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr52ds7w000844v647pc8nrk" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -514,6 +562,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/15/PE/">PE结构</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">upx手动脱壳</a>
           </li>
         
@@ -527,10 +579,6 @@
         
           <li>
             <a href="/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/04/AESKeyGenMe/">AESKeyGenMe</a>
           </li>
         
       </ul>
