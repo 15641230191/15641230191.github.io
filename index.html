@@ -73,8 +73,8 @@
   
     <article id="post-PE" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/07/15/PE/" class="article-date">
-  <time class="dt-published" datetime="2021-07-14T16:00:00.000Z" itemprop="datePublished">2021-07-15</time>
+    <a href="/2021/07/17/PE/" class="article-date">
+  <time class="dt-published" datetime="2021-07-16T16:00:00.000Z" itemprop="datePublished">2021-07-17</time>
 </a>
     
   </div>
@@ -85,7 +85,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/07/15/PE/">PE结构</a>
+      <a class="p-name article-title" href="/2021/07/17/PE/">PE结构</a>
     </h1>
   
 
@@ -95,7 +95,7 @@
       
         <h1 id="PE结构"><a href="#PE结构" class="headerlink" title="PE结构"></a>PE结构</h1><p>PE（Portable Execute）文件是Windows下可执行文件的总称，常见的有DLL，EXE，它们之间的区别只是语义上的，它们使用完全相同的PE格式，唯一的区别就是用一个字段标识出是EXE还是DLL。</p>
 <p>PE格式定义在头文件winnt.h中，64位PE格式只是对32位做了简单的扩展，结构几乎一样。<br><img src="https://img-blog.csdnimg.cn/20210715141353817.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h1 id="MS-DOS头部"><a href="#MS-DOS头部" class="headerlink" title="MS-DOS头部"></a>MS-DOS头部</h1><p>每个PE文件都是以一个DOS程序开始的。<br>PE文件的第一个字节起始于一个传统的MS-DOS头部，被称为IMAGE_DOS_HEADER。</p>
+<h2 id="MS-DOS头部"><a href="#MS-DOS头部" class="headerlink" title="MS-DOS头部"></a>MS-DOS头部</h2><p>每个PE文件都是以一个DOS程序开始的。<br>PE文件的第一个字节起始于一个传统的MS-DOS头部，被称为IMAGE_DOS_HEADER。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_DOS_HEADER &#123;      &#x2F;&#x2F; DOS .EXE header</span><br><span class="line">    WORD   e_magic;                     &#x2F;&#x2F; Magic number</span><br><span class="line">    WORD   e_cblp;                      &#x2F;&#x2F; Bytes on last page of file</span><br><span class="line">    WORD   e_cp;                        &#x2F;&#x2F; Pages in file</span><br><span class="line">    WORD   e_crlc;                      &#x2F;&#x2F; Relocations</span><br><span class="line">    WORD   e_cparhdr;                   &#x2F;&#x2F; Size of header in paragraphs</span><br><span class="line">    WORD   e_minalloc;                  &#x2F;&#x2F; Minimum extra paragraphs needed</span><br><span class="line">    WORD   e_maxalloc;                  &#x2F;&#x2F; Maximum extra paragraphs needed</span><br><span class="line">    WORD   e_ss;                        &#x2F;&#x2F; Initial (relative) SS value</span><br><span class="line">    WORD   e_sp;                        &#x2F;&#x2F; Initial SP value</span><br><span class="line">    WORD   e_csum;                      &#x2F;&#x2F; Checksum</span><br><span class="line">    WORD   e_ip;                        &#x2F;&#x2F; Initial IP value</span><br><span class="line">    WORD   e_cs;                        &#x2F;&#x2F; Initial (relative) CS value</span><br><span class="line">    WORD   e_lfarlc;                    &#x2F;&#x2F; File address of relocation table</span><br><span class="line">    WORD   e_ovno;                      &#x2F;&#x2F; Overlay number</span><br><span class="line">    WORD   e_res[4];                    &#x2F;&#x2F; Reserved words</span><br><span class="line">    WORD   e_oemid;                     &#x2F;&#x2F; OEM identifier (for e_oeminfo)</span><br><span class="line">    WORD   e_oeminfo;                   &#x2F;&#x2F; OEM information; e_oemid specific</span><br><span class="line">    WORD   e_res2[10];                  &#x2F;&#x2F; Reserved words</span><br><span class="line">    LONG   e_lfanew;                    &#x2F;&#x2F; File address of new exe header</span><br><span class="line">  &#125; IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;</span><br></pre></td></tr></table></figure>
 <p>e_magic：一个WORD类型0x4D5A,因此可执行文件必须都是’MZ’开头。</p>
 <p>e_lfanew：为32位可执行文件扩展的域，用来表示DOS头之后的NT头相对文件起始地址的偏移。</p>
@@ -103,11 +103,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_NT_HEADERS &#123;</span><br><span class="line">    DWORD Signature;</span><br><span class="line">    IMAGE_FILE_HEADER FileHeader;</span><br><span class="line">    IMAGE_OPTIONAL_HEADER32 OptionalHeader;</span><br><span class="line">   &#125; IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32; </span><br></pre></td></tr></table></figure>
 <h3 id="Signature"><a href="#Signature" class="headerlink" title="Signature"></a>Signature</h3><p>类似于DOS头中的e_magic，0x00004550，用字符表示是’PE’</p>
 <h3 id="FileHeader"><a href="#FileHeader" class="headerlink" title="FileHeader"></a>FileHeader</h3> <figure class="highlight plain"><figcaption><span>struct _IMAGE_FILE_HEADER &#123;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    WORD    Machine; &#x2F;&#x2F;运行平台</span><br><span class="line">    WORD    NumberOfSections; &#x2F;&#x2F;文件区块数</span><br><span class="line">    DWORD   TimeDateStamp; &#x2F;&#x2F;创建的日期时间</span><br><span class="line">    DWORD   PointerToSymbolTable; &#x2F;&#x2F;指向符号表</span><br><span class="line">    DWORD   NumberOfSymbols; &#x2F;&#x2F;符号表中符号个数</span><br><span class="line">    WORD    SizeOfOptionalHeader; &#x2F;&#x2F;紧随其后的可选头的大小</span><br><span class="line">    WORD    Characteristics; &#x2F;&#x2F;文件属性</span><br><span class="line">&#125; IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;</span><br></pre></td></tr></table></figure>
+<h3 id="OptionalHeader"><a href="#OptionalHeader" class="headerlink" title="OptionalHeader"></a>OptionalHeader</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">typedef struct _IMAGE_OPTIONAL_HEADER &#123;</span><br><span class="line">    WORD    Magic;</span><br><span class="line">    BYTE    MajorLinkerVersion;</span><br><span class="line">    BYTE    MinorLinkerVersion;</span><br><span class="line">    DWORD   SizeOfCode;</span><br><span class="line">    DWORD   SizeOfInitializedData;</span><br><span class="line">    DWORD   SizeOfUninitializedData;</span><br><span class="line">    DWORD   AddressOfEntryPoint; &#x2F;&#x2F;文件被执行时入口RVA地址</span><br><span class="line">    DWORD   BaseOfCode;</span><br><span class="line">    DWORD   BaseOfData;</span><br><span class="line"></span><br><span class="line">    DWORD   ImageBase; &#x2F;&#x2F;文件优先装入地址</span><br><span class="line">    DWORD   SectionAlignment; &#x2F;&#x2F;节在内存中对齐单位</span><br><span class="line">    DWORD   FileAlignment; &#x2F;&#x2F;节存储在磁盘文件中对齐单位</span><br><span class="line">    WORD    MajorOperatingSystemVersion;</span><br><span class="line">    WORD    MinorOperatingSystemVersion;</span><br><span class="line">    WORD    MajorImageVersion;</span><br><span class="line">    WORD    MinorImageVersion;</span><br><span class="line">    WORD    MajorSubsystemVersion;</span><br><span class="line">    WORD    MinorSubsystemVersion;</span><br><span class="line">    DWORD   Win32VersionValue;</span><br><span class="line">    DWORD   SizeOfImage;</span><br><span class="line">    DWORD   SizeOfHeaders;</span><br><span class="line">    DWORD   CheckSum;</span><br><span class="line">    WORD    Subsystem; &#x2F;&#x2F;子系统 </span><br><span class="line">    WORD    DllCharacteristics;</span><br><span class="line">    DWORD   SizeOfStackReserve;</span><br><span class="line">    DWORD   SizeOfStackCommit;</span><br><span class="line">    DWORD   SizeOfHeapReserve;</span><br><span class="line">    DWORD   SizeOfHeapCommit;</span><br><span class="line">    DWORD   LoaderFlags;</span><br><span class="line">    DWORD   NumberOfRvaAndSizes;</span><br><span class="line">    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]; &#x2F;&#x2F;数据目录表</span><br><span class="line">&#125; IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;</span><br></pre></td></tr></table></figure>
+<p> 数据目录表：<br> typedef struct _IMAGE_DATA_DIRECTORY {<br>    DWORD   VirtualAddress;<br>    DWORD   Size;<br>} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_EXPORT      0    &#x2F;&#x2F;导出表</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_IMPORT      1    &#x2F;&#x2F;导入表</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_RESOURCE    2    &#x2F;&#x2F;资源</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_EXCEPTION   3    &#x2F;&#x2F;异常</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_SECURITY    4    &#x2F;&#x2F;安全</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_BASERELOC   5    &#x2F;&#x2F;重定位表</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_DEBUG       6    &#x2F;&#x2F;调试信息</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_ARCHITECTURE 7   &#x2F;&#x2F;版权信息</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_GLOBALPTR   8  &#x2F;&#x2F;RVA of GP</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_TLS         9  &#x2F;&#x2F;TLS Directory</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_LOAD_IMPORT 10 &#x2F;&#x2F;Lood Configuration Directory</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT 11 &#x2F;&#x2F;Bound Import Directory in headers</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_IAT          12  &#x2F;&#x2F;导入函数地址表</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT  13  &#x2F;&#x2F;Delay Load Import Descriptors</span><br><span class="line">#define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14 &#x2F;&#x2F;COM Runtime descriptor</span><br></pre></td></tr></table></figure>
+<h2 id="节表"><a href="#节表" class="headerlink" title="节表"></a>节表</h2><p>  PE中所有节的属性都定义在节表中，节表由一系列IMAGE_SECTION_HEADER结构构成，每个结构描述一个节，最后以一个空的结构结束<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">  typedef struct _IMAGE_SECTION_HEADER &#123;</span><br><span class="line">  BYTE  Name[IMAGE_SIZEOF_SHORT_NAME]; &#x2F;&#x2F;节表名称</span><br><span class="line">  union &#123;</span><br><span class="line">    DWORD PhysicalAddress; &#x2F;&#x2F;物理地址</span><br><span class="line">    DWORD VirtualSize; &#x2F;&#x2F;区块的大小(没对齐的实际大小)</span><br><span class="line">  &#125; Misc;</span><br><span class="line">  DWORD VirtualAddress; &#x2F;&#x2F;装载到内存中的RVA，是SectionAlignment的整数倍</span><br><span class="line">  DWORD SizeOfRawData; &#x2F;&#x2F;在磁盘中占的大小</span><br><span class="line">  DWORD PointerToRawData; &#x2F;&#x2F;在磁盘中的偏移地址(从文件头开始)</span><br><span class="line">  DWORD PointerToRelocations;</span><br><span class="line">  DWORD PointerToLinenumbers;</span><br><span class="line">  WORD  NumberOfRelocations;</span><br><span class="line">  WORD  NumberOfLinenumbers;</span><br><span class="line">  DWORD Characteristics; &#x2F;&#x2F;区块的属性</span><br><span class="line">&#125; IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/15/PE/" data-id="ckr52ds7r000244v6gdu7d0um" data-title="PE结构" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/17/PE/" data-id="ckr7uwkf50002ywv646sk39ct" data-title="PE结构" class="article-share-link">Share</a>
       
       
       
@@ -152,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr52ds7v000744v6awbwbmju" data-title="upx手动脱壳" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr7uwkf90007ywv618ejet65" data-title="upx手动脱壳" class="article-share-link">Share</a>
       
       
       
@@ -193,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr52ds7z000944v63q9y7q4y" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr7uwkfe0009ywv64wnt7v3i" data-title="安卓逆向入门" class="article-share-link">Share</a>
       
       
       
@@ -235,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr52ds7u000644v6fzb73agk" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr7uwkf70005ywv6abth6x3e" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -290,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr52ds7s000344v6dj8afwrx" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr7uwkf60003ywv60mog0573" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -333,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr52ds7q000144v6848w6ag3" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr7uwkf40001ywv6464vfzno" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -387,7 +391,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr52ds7m000044v61z98cbwv" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr7uwkf00000ywv6gz1uf5ug" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -429,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr52ds7u000544v667glfetx" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr7uwkf80006ywv6878deddx" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -477,7 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr52ds7t000444v6gl7z8qbw" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr7uwkf70004ywv62yqrcgp5" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -519,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr52ds7w000844v647pc8nrk" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr7uwkfd0008ywv623wb3xcu" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -562,7 +566,7 @@
       <ul>
         
           <li>
-            <a href="/2021/07/15/PE/">PE结构</a>
+            <a href="/2021/07/17/PE/">PE结构</a>
           </li>
         
           <li>
