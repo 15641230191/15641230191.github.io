@@ -71,6 +71,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-符号执行" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/" class="article-date">
+  <time class="dt-published" datetime="2021-07-21T16:00:00.000Z" itemprop="datePublished">2021-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/">符号执行</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="符号执行"><a href="#符号执行" class="headerlink" title="符号执行"></a>符号执行</h1><p>简单的来说，符号执行就是在运行程序时，用符号来替代真实值。符号执行相较于真实值执行的优点在于，当使用真实值执行程序时，我们能够遍历的程序路径只有一条，而使用符号进行执行时，由于符号是可变的，我们就可以利用这一特性，尽可能的将程序的每一条路径遍历，这样的话，必定存在至少一条能够输出正确结果的分支，每一条分支的结果都可以表示为一个离散关系式，使用约束求解引擎即可分析出正确结果，这就是符号执行的简单阐述。</p>
+<h1 id="angr"><a href="#angr" class="headerlink" title="angr"></a>angr</h1><p>angr是适用范围最广的符号执行工具，pip install angr即可安装。</p>
+<h1 id="defcamp-r100"><a href="#defcamp-r100" class="headerlink" title="defcamp_r100"></a>defcamp_r100</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/7881c9b14a3bd51ec38fb58c4ed0f274.png" alt="请添加图片描述"><br><img src="https://img-blog.csdnimg.cn/img_convert/2d2b927d36a70e03459f6496962bc3f0.png" alt="请添加图片描述"><br><img src="https://img-blog.csdnimg.cn/img_convert/aa3abe2fdc32b59e6c75b43ddf24bbf5.png" alt="请添加图片描述"><br>程序的逻辑是输入一个字符串，在sub_4006FD中检验<br>官方脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import angr</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    p &#x3D; angr.Project(&quot;r100&quot;)</span><br><span class="line">    simgr &#x3D; p.factory.simulation_manager(p.factory.full_init_state())</span><br><span class="line">    simgr.explore(find&#x3D;0x400844, avoid&#x3D;0x400855)</span><br><span class="line"></span><br><span class="line">    return simgr.found[0].posix.dumps(0).strip(b&#39;\0\n&#39;)</span><br><span class="line"></span><br><span class="line">def test():</span><br><span class="line">    assert main().startswith(b&#39;Code_Talkers&#39;)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    print(main())</span><br></pre></td></tr></table></figure>
+<p>p = angr.Project(“r100”)<br>装载需要分析的程序，这样操作之后，p就是你的主二进制文件以及它依赖的所有库的代表。</p>
+<p>simgr = p.factory.simulation_manager(p.factory.full_init_state())<br>创建一个simulation_manager用来模拟执行并设置好状态</p>
+<p>simgr.explore(find=0x400844, avoid=0x400855)<br>让程序运行到0x400844(“Nice”)处，避免运行到0x400844(“Incorrect password!”)处。使用explore方法寻找到达到目标的路径。</p>
+<p>return simgr.found[0].posix.dumps(0).strip(b’\0\n’)<br>found成员是一个表，存储着所有找到的路径，成员数据类型是SimState，代表程序的状态，posix代表程序通过POSIX规范中的接口获取的数据。posix.dumps(0)获取的是标准输入中的数据。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/" data-id="ckrex09zk000ahgv618uo6vk9" data-title="符号执行" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-PE" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/17/PE/" class="article-date">
@@ -111,7 +157,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/17/PE/" data-id="ckr7v08e40001s4v61zuy8min" data-title="PE结构" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/17/PE/" data-id="ckrex09z90003hgv6d476h6ox" data-title="PE结构" class="article-share-link">Share</a>
       
       
       
@@ -156,7 +202,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckr7v08e90007s4v6bm46a6pj" data-title="upx手动脱壳" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckrex09za0006hgv68g5gafsy" data-title="upx手动脱壳" class="article-share-link">Share</a>
       
       
       
@@ -197,7 +243,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckr7v08ee0009s4v6dlj86lq2" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckrex09zc0009hgv6hlo1b1od" data-title="安卓逆向入门" class="article-share-link">Share</a>
       
       
       
@@ -239,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckr7v08e90006s4v68mmh8gk9" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckrex09zc0008hgv61g0v7935" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -294,7 +340,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckr7v08e60002s4v65ty6575e" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckrex09z80002hgv6b1ebbqyc" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -337,7 +383,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckr7v08e70003s4v6e06v9oop" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckrex09z60001hgv69waqggbv" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -391,7 +437,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckr7v08e10000s4v650cg4a7q" data-title="AES算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckrex09z20000hgv62s1m0iv5" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -433,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckr7v08e80005s4v6dey5757x" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckrex09za0005hgv6ejedbv2v" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -481,49 +527,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckr7v08e70004s4v6epxi0lnr" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-动态调试练习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" class="article-date">
-  <time class="dt-published" datetime="2021-05-05T16:00:00.000Z" itemprop="datePublished">2021-05-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/">动态调试练习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="CSTC2021-Crackme"><a href="#CSTC2021-Crackme" class="headerlink" title="[CSTC2021]Crackme"></a>[CSTC2021]Crackme</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>使用exeinfo查看信息，发现是32位文件，存在UPX壳<br><img src="https://img-blog.csdnimg.cn/20210506164305536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>脱壳后使用IDA反汇编</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>经过分析，发现主函数为sub_401109，使用F5生成伪代码<br><img src="https://img-blog.csdnimg.cn/20210506165311282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>观察到程序在此处判断生成的验证码是否正确，因此在这里下断点，并修改代码防止程序跳转到LABEL_35<br><img src="https://img-blog.csdnimg.cn/20210506171444497.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>每次运行到断点时查看dl<br>得到验证码为0x58,0x42,0x49,0x48,0x44,0x43,0x45,0x43,0x53,0x42</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">serial=[<span class="number">0x58</span>,<span class="number">0x42</span>,<span class="number">0x49</span>,<span class="number">0x48</span>,<span class="number">0x44</span>,<span class="number">0x43</span>,<span class="number">0x45</span>,<span class="number">0x43</span>,<span class="number">0x53</span>,<span class="number">0x42</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> serial:</span><br><span class="line">  <span class="built_in">print</span>(<span class="built_in">chr</span>(i))</span><br><span class="line"><span class="comment">#XBIHDCECSB</span></span><br></pre></td></tr></table></figure>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于一些比较简单的题目，只需要在比较的地方下个断点，然后通过查看内存得到flag。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckr7v08ea0008s4v60m363cuy" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckrex09z90004hgv6armmeq6k" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -536,6 +540,11 @@
 
   
 
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -566,6 +575,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/">符号执行</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/17/PE/">PE结构</a>
           </li>
         
@@ -579,10 +592,6 @@
         
           <li>
             <a href="/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/">pyc学习</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">Re中常见的加密算法</a>
           </li>
         
       </ul>

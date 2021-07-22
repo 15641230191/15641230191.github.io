@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   
   
-  <title>Archives: 2021/6 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2021/06/index.html">
+<meta property="og:url" content="http://example.com/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="John Doe">
@@ -71,38 +71,54 @@
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/06/03/exe%E8%BD%ACpy/" class="archive-article-date">
-  <time class="dt-published" datetime="2021-06-02T16:00:00.000Z" itemprop="datePublished">Jun 3</time>
+    <article id="post-动态调试练习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" class="article-date">
+  <time class="dt-published" datetime="2021-05-05T16:00:00.000Z" itemprop="datePublished">2021-05-06</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
+      <a class="p-name article-title" href="/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/">动态调试练习</a>
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CSTC2021-Crackme"><a href="#CSTC2021-Crackme" class="headerlink" title="[CSTC2021]Crackme"></a>[CSTC2021]Crackme</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>使用exeinfo查看信息，发现是32位文件，存在UPX壳<br><img src="https://img-blog.csdnimg.cn/20210506164305536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>脱壳后使用IDA反汇编</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>经过分析，发现主函数为sub_401109，使用F5生成伪代码<br><img src="https://img-blog.csdnimg.cn/20210506165311282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>观察到程序在此处判断生成的验证码是否正确，因此在这里下断点，并修改代码防止程序跳转到LABEL_35<br><img src="https://img-blog.csdnimg.cn/20210506171444497.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>每次运行到断点时查看dl<br>得到验证码为0x58,0x42,0x49,0x48,0x44,0x43,0x45,0x43,0x53,0x42</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">serial=[<span class="number">0x58</span>,<span class="number">0x42</span>,<span class="number">0x49</span>,<span class="number">0x48</span>,<span class="number">0x44</span>,<span class="number">0x43</span>,<span class="number">0x45</span>,<span class="number">0x43</span>,<span class="number">0x53</span>,<span class="number">0x42</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> serial:</span><br><span class="line">  <span class="built_in">print</span>(<span class="built_in">chr</span>(i))</span><br><span class="line"><span class="comment">#XBIHDCECSB</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于一些比较简单的题目，只需要在比较的地方下个断点，然后通过查看内存得到flag。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckrex09zb0007hgv6ea2n2xsh" data-title="动态调试练习" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
   </div>
+  
 </article>
-  
-  
-    </div></section>
+
+
+
   
 
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
         
