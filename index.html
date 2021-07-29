@@ -71,6 +71,54 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-angr" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/29/angr/" class="article-date">
+  <time class="dt-published" datetime="2021-07-28T16:00:00.000Z" itemprop="datePublished">2021-07-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/29/angr/">符号执行(二)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>学习如何优化angr脚本，题目defcamp_r100</p>
+<h2 id="指定入口地址"><a href="#指定入口地址" class="headerlink" title="指定入口地址"></a>指定入口地址</h2><p>这种方法可以避免angr反复执行程序初始化操作，让程序从main开始运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">state&#x3D;p.factory.blank_state(addr&#x3D;0x4007E8)</span><br></pre></td></tr></table></figure>
+<h2 id="改写库函数"><a href="#改写库函数" class="headerlink" title="改写库函数"></a>改写库函数</h2><p>载入程序时，阻止angr自动载入依赖的库函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p &#x3D; angr.Project(&quot;r100&quot;,auto_load_libs&#x3D;False)</span><br></pre></td></tr></table></figure>
+<p>auto_load_libs默认为True，但angr对libc库做了优化，不需要再加载。<br>输出函数对算法的分析没有影响，可以让其直接返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.hook_symbol(&#39;printf&#39;,angr.SIM_PROCEDURES[&#39;stubs&#39;][&#39;ReturnUnconstrained&#39;](),replace&#x3D;True)</span><br></pre></td></tr></table></figure>
+<p>hook掉printf使之返回[‘stubs’][‘ReturnUnconstrained’]（一个无约束的符号）<br>本题中，输入的flag长度为12，可以直接hook掉fgets函数在应该指向的内存地址放置12字节的输入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class my_fgets(angr.SimProcedure):</span><br><span class="line">    def run(self,s,num,f):</span><br><span class="line">        simfd&#x3D;self.state.posix.get_fd(0)</span><br><span class="line">        data,real_size&#x3D;simfd.read_data(12)</span><br><span class="line">        self.state.memory.store(s,data)</span><br><span class="line">        return 12</span><br><span class="line">p.hook_symbol(&#39;fgets&#39;,my_fgets(),replace&#x3D;True)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/29/angr/" data-id="ckrohskqo0009bcv682kkh04m" data-title="符号执行(二)" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-baby-re" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/26/baby-re/" class="article-date">
@@ -106,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/26/baby-re/" data-id="ckrkoqz3u0005lcv6ap4521ze" data-title="baby-re(DEFCON 2016 quals)" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/26/baby-re/" data-id="ckrohskqk0003bcv6gnslgtf8" data-title="baby-re(DEFCON 2016 quals)" class="article-share-link">Share</a>
       
       
       
@@ -152,7 +200,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/" data-id="ckrkoqz41000alcv61ir51bt1" data-title="符号执行" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/22/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C/" data-id="ckrohskqo000abcv6epm1e9g1" data-title="符号执行" class="article-share-link">Share</a>
       
       
       
@@ -204,7 +252,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/17/PE/" data-id="ckrkoqz3s0002lcv61vwqhgqh" data-title="PE结构" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/17/PE/" data-id="ckrohskqj0002bcv67mmfeif6" data-title="PE结构" class="article-share-link">Share</a>
       
       
       
@@ -249,7 +297,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckrkoqz3w0008lcv6ev5zbb6d" data-title="upx手动脱壳" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/" data-id="ckrohskqn0008bcv6hko84sni" data-title="upx手动脱壳" class="article-share-link">Share</a>
       
       
       
@@ -290,7 +338,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckrkoqz42000blcv6d61i0yqd" data-title="安卓逆向入门" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/" data-id="ckrohskqu000bbcv64ynaf2b8" data-title="安卓逆向入门" class="article-share-link">Share</a>
       
       
       
@@ -332,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckrkoqz3v0007lcv62hcqgp17" data-title="pyc学习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/09/pyc%E5%AD%A6%E4%B9%A0/" data-id="ckrohskqn0007bcv64ejvawxb" data-title="pyc学习" class="article-share-link">Share</a>
       
       
       
@@ -387,7 +435,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckrkoqz3t0003lcv68yar21xy" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/07/Re%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" data-id="ckrohskql0004bcv6hpl79uv4" data-title="Re中常见的加密算法" class="article-share-link">Share</a>
       
       
       
@@ -430,7 +478,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckrkoqz3r0001lcv65wav80ia" data-title="AESKeyGenMe" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/04/AESKeyGenMe/" data-id="ckrohskqi0001bcv66tiwfly5" data-title="AESKeyGenMe" class="article-share-link">Share</a>
       
       
       
@@ -484,49 +532,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckrkoqz3m0000lcv6acogexpl" data-title="AES算法" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-exe转py" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/06/03/exe%E8%BD%ACpy/" class="article-date">
-  <time class="dt-published" datetime="2021-06-02T16:00:00.000Z" itemprop="datePublished">2021-06-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>使用python打包成的exe文件可以使用反编译的方法获得源码</p>
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p><img src="https://img-blog.csdnimg.cn/20210603130915986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>查看编译信息，注意python版本</p>
-<h1 id="exe转pyc"><a href="#exe转pyc" class="headerlink" title="exe转pyc"></a>exe转pyc</h1><p>使用工具pyinstxtractor<br><a target="_blank" rel="noopener" href="https://github.com/countercept/python-exe-unpacker/blob/master/pyinstxtractor.py">https://github.com/countercept/python-exe-unpacker/blob/master/pyinstxtractor.py</a><br>使用相同版本的python，输入命令python pyinstxtractor.py [filename]<br><img src="https://img-blog.csdnimg.cn/20210603131729183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在生成的[filename]_extracted文件夹下找到主程序<br><img src="https://img-blog.csdnimg.cn/20210603142449898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到主程序并没有.pyc的扩展名，这是由于反编译出的程序缺少pyc文件头，需要我们自己补上。<br>可以安装struct的文件头来补。<br><img src="https://img-blog.csdnimg.cn/20210603201547989.png" alt="在这里插入图片描述"><br>补充后变为<br><img src="https://img-blog.csdnimg.cn/20210603201659502.png" alt="在这里插入图片描述"></p>
-<h1 id="pyc转py"><a href="#pyc转py" class="headerlink" title="pyc转py"></a>pyc转py</h1><p>使用uncompyle6<br>命令行输入 uncompyle6.exe [源文件] &gt; [目标文件]<br><img src="https://img-blog.csdnimg.cn/20210603201936274.png" alt="在这里插入图片描述"><br>如果反编译失败很有可能是文件头没有修改正确，多改几次到正确为止即可。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckrkoqz3v0006lcv61r3ma6kf" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckrohskqe0000bcv603vy7dq1" data-title="AES算法" class="article-share-link">Share</a>
       
       
       
@@ -574,6 +580,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/29/angr/">符号执行(二)</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/26/baby-re/">baby-re(DEFCON 2016 quals)</a>
           </li>
         
@@ -587,10 +597,6 @@
         
           <li>
             <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">upx手动脱壳</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/">安卓逆向入门</a>
           </li>
         
       </ul>

@@ -71,6 +71,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-exe转py" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/06/03/exe%E8%BD%ACpy/" class="article-date">
+  <time class="dt-published" datetime="2021-06-02T16:00:00.000Z" itemprop="datePublished">2021-06-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/06/03/exe%E8%BD%ACpy/">exe转py</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>使用python打包成的exe文件可以使用反编译的方法获得源码</p>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p><img src="https://img-blog.csdnimg.cn/20210603130915986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>查看编译信息，注意python版本</p>
+<h1 id="exe转pyc"><a href="#exe转pyc" class="headerlink" title="exe转pyc"></a>exe转pyc</h1><p>使用工具pyinstxtractor<br><a target="_blank" rel="noopener" href="https://github.com/countercept/python-exe-unpacker/blob/master/pyinstxtractor.py">https://github.com/countercept/python-exe-unpacker/blob/master/pyinstxtractor.py</a><br>使用相同版本的python，输入命令python pyinstxtractor.py [filename]<br><img src="https://img-blog.csdnimg.cn/20210603131729183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在生成的[filename]_extracted文件夹下找到主程序<br><img src="https://img-blog.csdnimg.cn/20210603142449898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到主程序并没有.pyc的扩展名，这是由于反编译出的程序缺少pyc文件头，需要我们自己补上。<br>可以安装struct的文件头来补。<br><img src="https://img-blog.csdnimg.cn/20210603201547989.png" alt="在这里插入图片描述"><br>补充后变为<br><img src="https://img-blog.csdnimg.cn/20210603201659502.png" alt="在这里插入图片描述"></p>
+<h1 id="pyc转py"><a href="#pyc转py" class="headerlink" title="pyc转py"></a>pyc转py</h1><p>使用uncompyle6<br>命令行输入 uncompyle6.exe [源文件] &gt; [目标文件]<br><img src="https://img-blog.csdnimg.cn/20210603201936274.png" alt="在这里插入图片描述"><br>如果反编译失败很有可能是文件头没有修改正确，多改几次到正确为止即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckrohskqk0007tgv66x6184gj" data-title="exe转py" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-TSCTF-J 2019 EasyCPP" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/05/12/TSCTF-J%202019%20EasyCPP/" class="article-date">
@@ -107,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckrkoqz3u0004lcv66whd9xf1" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckrohskqi0004tgv600cp0h1a" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -149,7 +191,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckrkoqz3x0009lcv62sv24dvn" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckrohskqm000atgv67oayhzm8" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -197,6 +239,10 @@
       <ul>
         
           <li>
+            <a href="/2021/07/29/angr/">符号执行(二)</a>
+          </li>
+        
+          <li>
             <a href="/2021/07/26/baby-re/">baby-re(DEFCON 2016 quals)</a>
           </li>
         
@@ -210,10 +256,6 @@
         
           <li>
             <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">upx手动脱壳</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/10/%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91%E5%85%A5%E9%97%A8/">安卓逆向入门</a>
           </li>
         
       </ul>
