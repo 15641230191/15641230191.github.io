@@ -71,6 +71,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-AES" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/02/AES/" class="article-date">
+  <time class="dt-published" datetime="2021-07-01T16:00:00.000Z" itemprop="datePublished">2021-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/02/AES/">AES算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>AES,高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。严格地说，AES和Rijndael加密法并不完全一样（虽然在实际应用中二者可以互换），因为Rijndael加密法可以支持更大范围的区块和密钥长度：AES的区块长度固定为128 比特，密钥长度则可以是128，192或256比特；而Rijndael使用的密钥和区块长度可以是32位的整数倍，以128位为下限，256比特为上限。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="基本术语"><a href="#基本术语" class="headerlink" title="基本术语"></a>基本术语</h2><h3 id="字节"><a href="#字节" class="headerlink" title="字节"></a>字节</h3><p>AES基本处理单位为字节，在AES中字节可以以有限域上的多项式表示<br>$b_7x^7+b_6x^6+b_5x^5+b_4x^4+b_3x^3+b_2x^2+b_1x+b_0$<br>例：字节 01100011（0x63）：$x^6+x^5+x+1$</p>
+<h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>AES的操作在称为状态(state)的二维字节数组上进行。状态由4行字节组成，每行长度为(分组长度/32)个字节。在实际实现中将每一列的4个字节作为32位字。<br>例：长度为128位的分组数据块<br>F6 14 46 C1 A6 8C EA 53 82 48 26 A7 A4 7F 19 14<br>| F6 | A6 | 82 | A4 |<br>| :—–:| :—-: | :—-: | :—-: |<br>| 14 | 8C | 48 | 7F |<br>| 46 | EA | 26 | 19 |<br>| C1 | 53 | A7 | 14 |</p>
+<h2 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h2><h3 id="加减法"><a href="#加减法" class="headerlink" title="加减法"></a>加减法</h3><p>有限域上加减法是通过对应多项式中相同次幂系数相加减后模2来实现的，加法也可以看作异或操作。</p>
+<h3 id="乘法"><a href="#乘法" class="headerlink" title="乘法"></a>乘法</h3><p>对应多项式相乘再模$x^8+x^4+x^3+x+1$</p>
+<h3 id="乘x"><a href="#乘x" class="headerlink" title="乘x"></a>乘x</h3><p>多项式乘x得到$b_7x^8+b_6x^7+b_5x^6+b_4x^5+b_3x^4+b_2x^3+b_1x^2+b_0x$<br>模$x^8+x^4+x^3+x+1$约简，$b_7=0$则为最简，不为零则减去$x^8+x^4+x^3+x+1$。<br>这种乘法在AES中称作xtime()</p>
+<h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>AES输入、输出分组及状态数组的长度都是128位，即Nb(分组长度/32)=4，密钥K长度为128/192/256位，即Nk=4/6/8。轮数用Nr表示，Nk=4时，Nr=10，Nk=6时，Nr=12，Nk=10时，Nr=14。</p>
+<h3 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a>加密过程</h3><p>将输入复制到状态数组。进行一个初始轮密钥加，然后执行轮函数Nr次，其中最后一轮不同于前Nr-1轮。最后得到密文。<br>轮函数有四个组成部分：SubBytes(),ShiftRows(),MixColumns(),AddRoundKey()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cipher(byte in[4][Nb],byte out[4][Nb],dword dw[Nb][Nr+1])</span><br><span class="line">&#123;</span><br><span class="line">    byte state[4][Nb]</span><br><span class="line">    state&#x3D;in</span><br><span class="line">    AddRoundKey(state,dw[0][Nb-1]) &#x2F;&#x2F;初始轮密钥加</span><br><span class="line">    for(i&#x3D;0;i&lt;Nr-1;i++) &#x2F;&#x2F;Nr-1轮轮函数</span><br><span class="line">    &#123;</span><br><span class="line">        SubBytes(state)</span><br><span class="line">        ShiftRows(state)</span><br><span class="line">        MixColumns(state)</span><br><span class="line">        AddRoundKey(state,dw[i*Nb,(i+1)*Nb-1])</span><br><span class="line">    &#125;</span><br><span class="line">    SubBytes(state)</span><br><span class="line">    ShiftRows(state)</span><br><span class="line">    AddRoundKey(state,dw[Nr*Nb,(Nr+1)*Nb-1])</span><br><span class="line">    out&#x3D;state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="SubBytes"><a href="#SubBytes" class="headerlink" title="SubBytes()"></a>SubBytes()</h3><p>字节代换，AES定义了一个16x16的S-box。<br><img src="https://img-blog.csdnimg.cn/20210702192744824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>以状态数组每个元素高4位作行标，低4位作列标，取出S-box中元素作为操作结果。</p>
+<h3 id="ShiftRows"><a href="#ShiftRows" class="headerlink" title="ShiftRows()"></a>ShiftRows()</h3><p>状态数组第一行保持不变，第二行循环左移一个字节，第三行循环左移两个字节，第四行循环左移三个字节。</p>
+<h3 id="MixColumns"><a href="#MixColumns" class="headerlink" title="MixColumns()"></a>MixColumns()</h3><p>以列为单位作变换<br>$\begin{bmatrix}s_{0,c}\s_{1,c}\s_{2,c}\s_{3,c}\\end{bmatrix}=\begin{bmatrix}02&amp;03&amp;01&amp;01\01&amp;02&amp;03&amp;01\01&amp;01&amp;02&amp;03\03&amp;01&amp;01&amp;02\end{bmatrix}\begin{bmatrix}s_{0,c}\s_{1,c}\s_{2,c}\s_{3,c}\\end{bmatrix}$</p>
+<h3 id="AddRoundKey"><a href="#AddRoundKey" class="headerlink" title="AddRoundKey()"></a>AddRoundKey()</h3><p>将状态中元素同轮密钥通过简单的异或运算相加。轮密钥是由密钥通过密钥扩展生成的，也可看做一个状态数组。<br>密钥扩展：<br>将密钥进行处理，生成Nb(Nr+1)个32位双字，为轮函数提供密钥。<br><img src="https://img-blog.csdnimg.cn/20210702210915584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210702210948666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210702211545265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQ4NDkw,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>加密算法的逆过程，解密轮函数也有四部分：<br>InvShiftRows(ShiftRows的逆过程):执行相应的向右位移<br>InvSubBytes(SubBytes的逆过程):在Inverse S-box中查表操作<br>InvMixColumns(MixColumns的逆过程):乘矩阵$\begin{bmatrix}0e&amp;0b&amp;0d&amp;09\09&amp;0e&amp;0b&amp;0d\0d&amp;09&amp;0e&amp;0b\0b&amp;0d&amp;09&amp;0e\end{bmatrix}$<br>AddRoundKey为异或操作，逆过程是其本身。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>实际软件实现采用了空间换时间的方法，与上述过程不同,常常将轮函数的几个步骤合并为一组查表操作。<br>实现过程中定义了4个T表，每个T表都有256个4字节的32位双字（共4KB），以此将SubBytes，ShiftRows，MixColumns合并为简单的查表操作。AddRoundKey可以通过在每一列上执行一个32位异或来实现。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/02/AES/" data-id="ckrt90xs50000rov6g65c15h5" data-title="AES算法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-exe转py" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/06/03/exe%E8%BD%ACpy/" class="article-date">
@@ -101,7 +155,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckrohskqk0007tgv66x6184gj" data-title="exe转py" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/06/03/exe%E8%BD%ACpy/" data-id="ckrt90xsf0008rov6aoqcg8n3" data-title="exe转py" class="article-share-link">Share</a>
       
       
       
@@ -149,7 +203,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckrohskqi0004tgv600cp0h1a" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/12/TSCTF-J%202019%20EasyCPP/" data-id="ckrt90xse0006rov6f5i43vzr" data-title="TSCTF-J 2019 EasyCPP" class="article-share-link">Share</a>
       
       
       
@@ -191,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckrohskqm000atgv67oayhzm8" data-title="动态调试练习" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/06/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%BB%83%E4%B9%A0/" data-id="ckrt90xsi000brov69l0m2fjv" data-title="动态调试练习" class="article-share-link">Share</a>
       
       
       
@@ -226,7 +280,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li></ul>
     </div>
   </div>
 
@@ -237,6 +291,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/08/01/SignIn/">TSCTF-J [SUCTF 2019] SignIn</a>
+          </li>
         
           <li>
             <a href="/2021/07/29/angr/">符号执行(二)</a>
@@ -252,10 +310,6 @@
         
           <li>
             <a href="/2021/07/17/PE/">PE结构</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/12/upx%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3/">upx手动脱壳</a>
           </li>
         
       </ul>
